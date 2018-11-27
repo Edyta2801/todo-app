@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
-
+import { List, ListItem } from 'material-ui/List';
+import Checkbox from 'material-ui/Checkbox';
 
 const API_URL = 'https://monday-482dc.firebaseio.com';
 
@@ -19,7 +20,7 @@ class App extends Component {
     fetch(`${API_URL}/tasks.json`)
       .then(response => response.json())
       .then(data => {
-        if(!data){   //jeżeli baza nie jest pusta 
+        if (!data) {   //jeżeli baza nie jest pusta 
           return
         }
         const array = Object.entries(data);//index 0-klucze, index 1-obiekty zadań
@@ -34,7 +35,7 @@ class App extends Component {
 
 
 
-  addTask=()=>{
+  addTask = () => {
     if (this.state.taskName !== '') {
       let tasks = this.state.tasks;
       const newTask = { taskName: this.state.taskName, completed: false };
@@ -50,7 +51,7 @@ class App extends Component {
         });
     }
   }
-  
+
 
   handleClick = () => {
     this.addTask();
@@ -70,14 +71,18 @@ class App extends Component {
             value={this.state.taskName}
             onKeyDown={this.handleKeyDown}
             onChange={this.handleChange}
-           />
+          />
           <FlatButton label="Add" primary={true} onClick={this.handleClick} />
         </div>
-        <div>
-          {this.state.tasks.map((task) => (
-            <div key={task.id}>{task.taskName}</div>
+        <List>
+          {this.state.tasks.map(task => (
+            <ListItem
+              key={task.id}
+              primaryText={task.taskName}
+              leftCheckbox={<Checkbox />}
+            />
           ))}
-        </div>
+        </List>
       </div>
     );
   }
