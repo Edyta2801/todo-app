@@ -3,6 +3,7 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
 import DeleteIcon from 'material-ui/svg-icons/action/delete';
+import IconButton from 'material-ui/IconButton';
 import Checkbox from 'material-ui/Checkbox';
 
 
@@ -17,12 +18,12 @@ class App extends Component {
   handleChange = (event) => {
     this.setState({ taskName: event.target.value });
   }
-
-  componentWillMount() {
+  loadData() {
     fetch(`${API_URL}/tasks.json`)
       .then(response => response.json())
       .then(data => {
         if (!data) {   //jeżeli baza nie jest pusta 
+          this.setState({tasks:[]});
           return
         }
         const array = Object.entries(data);//index 0-klucze, index 1-obiekty zadań
@@ -33,6 +34,10 @@ class App extends Component {
         });
         this.setState({ tasks: tasksList, taskName: '' });
       });
+  }
+
+  componentWillMount() {
+    this.loadData();
   }
 
 
@@ -60,9 +65,18 @@ class App extends Component {
   }
 
   handleKeyDown = event => {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
       this.handleClick();
     }
+  }
+
+  handleDelete = (id) => {
+    fetch(`${API_URL}/tasks/${id}.json`, {
+      method: 'DELETE'
+    })
+    .then(()=>{
+      this.loadData()
+    })
   }
 
   render() {
@@ -77,13 +91,17 @@ class App extends Component {
           <FlatButton label="Add" primary={true} onClick={this.handleClick} />
         </div>
         <List>
-          {this.state.tasks.map(task => (
-            <ListItem
+        {this.state.tasks.map(task => (
+          <ListItem
               key={task.id}
               primaryText={task.taskName}
               leftCheckbox={<Checkbox />}
-              rightIcon={<DeleteIcon />}
-            />
+              rightIconButton={
+                <IconButton>
+                  <DeleteIcon onClick={() => this.handleDelete(task.id)} />
+                </IconButton>
+              }
+              />
           ))}
         </List>
       </div>
