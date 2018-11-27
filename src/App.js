@@ -2,7 +2,9 @@ import React, { Component } from 'react';
 import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 import { List, ListItem } from 'material-ui/List';
+import DeleteIcon from 'material-ui/svg-icons/action/delete';
 import Checkbox from 'material-ui/Checkbox';
+
 
 const API_URL = 'https://monday-482dc.firebaseio.com';
 
@@ -80,6 +82,7 @@ class App extends Component {
               key={task.id}
               primaryText={task.taskName}
               leftCheckbox={<Checkbox />}
+              rightIcon={<DeleteIcon />}
             />
           ))}
         </List>
