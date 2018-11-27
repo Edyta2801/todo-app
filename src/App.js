@@ -19,6 +19,9 @@ class App extends Component {
     fetch(`${API_URL}/tasks.json`)
       .then(response => response.json())
       .then(data => {
+        if(!data){   //jeżeli baza nie jest pusta 
+          return
+        }
         const array = Object.entries(data);//index 0-klucze, index 1-obiekty zadań
         console.log(data)
         const tasksList = array.map(([id, values]) => {
