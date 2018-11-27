@@ -3,6 +3,8 @@ import TextField from 'material-ui/TextField';
 import FlatButton from 'material-ui/FlatButton';
 
 
+const API_URL='https://monday-482dc.firebaseio.com';
+
 class App extends Component {
   state = {
     tasks: [
@@ -16,31 +18,38 @@ class App extends Component {
     this.setState({ taskName: event.target.value });
   }
   handleClick = () => {
-    if (this.state.taskName !==''){
-    let tasks = this.state.tasks;
-    tasks.push({ taskName: this.state.taskName, completed: false })
-    this.setState({ tasks, taskName:'' });
+    if (this.state.taskName !== '') {
+      let tasks = this.state.tasks;
+      const newTask={taskName:this.state.taskName, completed:false};
+      fetch('https://monday-482dc.firebaseio.com/tasks.json'), {
+        method: 'POST',
+        body: JSON.stringify(newTask)
+      }).then(()=>{
+        tasks.push(newTask);
+        this.setState({ tasks, taskName:'' });
+      })
     }
   }
 
 
-  render() {
-    return (
-      <div className="App">
-        <div>
-          <TextField hintText="Enter you task here" 
-          value={this.state.taskName} 
+
+render() {
+  return (
+    <div className="App">
+      <div>
+        <TextField hintText="Enter you task here"
+          value={this.state.taskName}
           onChange={this.handleChange} />
-          <FlatButton label="Add" primary={true} onClick={this.handleClick} />
-        </div>
-        <div>
-          {this.state.tasks.map((task, index) => (
-            <div>{task.taskName}</div>
-          ))}
-        </div>
+        <FlatButton label="Add" primary={true} onClick={this.handleClick} />
       </div>
-    );
-  }
+      <div>
+        {this.state.tasks.map((task, index) => (
+          <div>{task.taskName}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
 }
 
 export default App;
