@@ -15,10 +15,12 @@ class App extends Component {
   handleChange = (event) => {
     this.setState({ taskName: event.target.value });
   }
-  handleClick = (event) => {
+  handleClick = () => {
+    if (this.state.taskName !==''){
     let tasks = this.state.tasks;
     tasks.push({ taskName: this.state.taskName, completed: false })
-    this.setState({ tasks })
+    this.setState({ tasks, taskName:'' });
+    }
   }
 
 
@@ -26,7 +28,9 @@ class App extends Component {
     return (
       <div className="App">
         <div>
-          <TextField hintText="Enter you task here" onChange={this.handleChange} />
+          <TextField hintText="Enter you task here" 
+          value={this.state.taskName} 
+          onChange={this.handleChange} />
           <FlatButton label="Add" primary={true} onClick={this.handleClick} />
         </div>
         <div>
