@@ -30,7 +30,8 @@ class App extends Component {
   }
 
 
-  handleClick = () => {
+
+  addTask=()=>{
     if (this.state.taskName !== '') {
       let tasks = this.state.tasks;
       const newTask = { taskName: this.state.taskName, completed: false };
@@ -45,6 +46,11 @@ class App extends Component {
           this.setState({ tasks, taskName: '' })
         });
     }
+  }
+  
+
+  handleClick = () => {
+    this.addTask();
   }
 
   handleKeyDown = event => {
