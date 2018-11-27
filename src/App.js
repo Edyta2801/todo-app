@@ -23,7 +23,7 @@ class App extends Component {
       .then(response => response.json())
       .then(data => {
         if (!data) {   //jeżeli baza nie jest pusta 
-          this.setState({tasks:[]});
+          this.setState({ tasks: [] });
           return
         }
         const array = Object.entries(data);//index 0-klucze, index 1-obiekty zadań
@@ -74,9 +74,19 @@ class App extends Component {
     fetch(`${API_URL}/tasks/${id}.json`, {
       method: 'DELETE'
     })
-    .then(()=>{
-      this.loadData()
+      .then(() => {
+        this.loadData()
+      })
+  }
+  handleCheck = (task) => {
+    task.completed = !task.completed
+    fetch(`${API_URL}/tasks/${task.id}.json`, {
+      method: 'PUT',
+      body: JSON.stringify(task)
     })
+    // .then(() => {
+    //   this.loadData()
+    // })
   }
 
   render() {
@@ -91,17 +101,23 @@ class App extends Component {
           <FlatButton label="Add" primary={true} onClick={this.handleClick} />
         </div>
         <List>
-        {this.state.tasks.map(task => (
-          <ListItem
+          {this.state.tasks.map(task => (
+            <ListItem
               key={task.id}
               primaryText={task.taskName}
-              leftCheckbox={<Checkbox />}
+              leftCheckbox={
+                <Checkbox
+                  defaultChecked={task.completed}
+                  onCheck={() => this.handleCheck(task)
+                  }
+                />
+              }
               rightIconButton={
                 <IconButton>
                   <DeleteIcon onClick={() => this.handleDelete(task.id)} />
                 </IconButton>
               }
-              />
+            />
           ))}
         </List>
       </div>
