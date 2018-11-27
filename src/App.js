@@ -12,13 +12,22 @@ class App extends Component {
     taskName: ''
   }
 
+  handleChange = (event) => {
+    this.setState({ taskName: event.target.value });
+  }
+  handleClick = (event) => {
+    let tasks = this.state.tasks;
+    tasks.push({ taskName: this.state.taskName, completed: false })
+    this.setState({ tasks })
+  }
+
 
   render() {
     return (
       <div className="App">
         <div>
-          <TextField hintText="Enter you task here" />
-          <FlatButton label="Add" primary={true} />
+          <TextField hintText="Enter you task here" onChange={this.handleChange} />
+          <FlatButton label="Add" primary={true} onClick={this.handleClick} />
         </div>
         <div>
           {this.state.tasks.map((task, index) => (
